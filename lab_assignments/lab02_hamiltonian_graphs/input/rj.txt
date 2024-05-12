@@ -1,0 +1,59 @@
+Rješenje 2. laboratorijske vježbe.
+1-povezanost možete utvrditi običnim DFS-om. Ako je gcd(k₁, k₂, k₃, k₄) > 1 možete odmah ispisati da graf G nije povezan.
+Hamiltonost (nakon provjere povezanosti u gornjem koraku) možete odrediti pomoću nekoliko ifova:
+Neka je k₁ < k₂ < k₃ < k₄.
+(1) Ako je k₁ = 1, te n, k₂, k₃ i k₄ (osim onih koji su ≥ n) nisu iste parnosti, graf jest hamiltonovski.
+(2) Ako je k₁ = 1, k₂ ≤ n / 2, te su n, k₂, k₃ i k₄ svi parni ili ≥ n, graf jest hamiltonovski.
+(3) Ako je k₁ = 1, ali gornji uvjeti nisu ispunjeni, graf nije hamiltonovski.
+(4) Ako je k₁ = 2, k₂ ≥ n / 2, n je paran, vrijedi da su k₂, k₃ i k₄ svi neparni ili ≥ n, te su (n - k₂ + 1) / 2, (n - k₃ + 1) / 2 i (n - k₄ + 1) / 2 svi iste parnosti (osim za one k-ove koji su ≥ n), tada graf nije hamiltonovski.
+Kao primjer slučaja (4), ako je k₁ = 2, k₂ ≥ n / 2, n je paran, k₂ je neparan, k₃ ≥ n, te k₄ ≥ n, tada graf nije hamiltonovski. Ovakav je slučaj u primjeru u PDF-u.
+(5) Ako je k₁ = 2, k₂ ≥ (n-1) / 2, n je neparan, k₂ je neparan, k₃ ≥ n, k₄ ≥ n, te je (n - k₂) / 2 paran, tada graf nije hamiltonovski.
+(6) Ako je k₁ = 2, ali gornji uvjeti nisu ispunjeni, graf jest hamiltonovski.
+(7) Ako je k₁ ≥ 2, za neke x, y ∈ {k₁, k₂, k₃, k₄} vrijedi gcd(x, y) = 1, vrijedi x + 2y ≥ n, te je (n - y) / x neparan prirodan broj, tada je graf hamiltonovski.
+(8) Ako je k₁ ≥ 2, za neke x, y ∈ {k₁, k₂, k₃, k₄} vrijedi gcd(x, y) = 1, te je broj n djeljiv sa brojem x+y, tada je graf hamiltonovski.
+(9) Ako je k₁ ≥ 2, ali gornji uvjeti nisu ispunjeni, graf nije hamiltonovski.
+
+
+void dfs(int node, int * matrica_susjedstva, int n, int posjetio[])
+{
+  if (posjetio[node] == 1) return;
+  posjetio[node] = 1;
+  for (int i = 0; i < n; i++) {
+    if (matrica_susjedstva[node * n + i] == 1)
+      dfs(i, matrica_susjedstva, n, posjetio);
+  }
+}
+
+
+1) 	n = 12 ; k = { 2 , 4 , 6 , 8 }
+	nije povezan, nije hamiltonovski
+2)	n = 12 ; k = { 4 , 6 , 8 , 10 }
+	nije povezan, nije hamiltonovski
+3)	n = 12 ; k = { 10 , 11 , 13 , 16 }
+	nije povezan, nije hamiltonovski
+4)	n = 12 ; k = { 4 , 8 , 9 , 10 }
+	povezan, nije hamiltonovski
+5)	n = 12 ; k = { 6 , 9 , 10 , 13 }
+	povezan, nije hamiltonovski
+6)	n = 12 ; k = { 1 , 8 , 10 , 12 }
+	povezan, nije hamiltonovski
+7)	n = 12 ; k = { 5 , 7 , 98 , 99 }
+	povezan, hamiltonovski
+8)	n = 12 ; k = { 1 , 4 , 9 , 12 }
+	povezan, hamiltonovski
+9)	n = 12 ; k = { 1 , 2 , 3 , 4 }
+	povezan, hamiltonovski
+10)	n = 4 ; k = { 1 , 2 , 4 , 5 }
+	povezan, hamiltonovski
+11)	n = 4 ; k = { 2 , 3 , 4 , 5 }
+	povezan, nije hamiltonovski
+12)	n = 5 ; k = { 3 , 4 , 5 , 6 }
+	nije povezan, nije hamiltonovski
+13)	n = 15 ; k = { 3 , 5 , 7 , 9 }
+	povezan, nije hamiltonovski
+14)	n = 2 ; k = { 1 , 2 , 3 , 4 }
+	povezan, nije hamiltonovski
+15)	n = 2 ; k = { 3 , 5 , 6 , 7 }
+	nije povezan, nije hamiltonovski
+16)	n = 1 ; k = { 1 , 2 , 3 , 4 }
+	povezan, nije hamiltonovski
